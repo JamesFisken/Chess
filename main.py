@@ -16,8 +16,12 @@ if __name__ == '__main__':
     background_color = (0, 0, 20)
 
     square_color_black = (105, 57, 3)
+    square_color_black_clicked = (75, 27, 0)
     square_color_white = (250, 225, 197)
+    square_color_white_clicked = (200, 175, 147)
     square_size = 120
+
+    clicked = 0
 
     DEFAULT_IMAGE_SIZE = (120, 120)
     # images
@@ -64,11 +68,21 @@ if __name__ == '__main__':
             self.x = x
             self.y = y
             self.state = state
+            self.clicked = False
             # black/white chess board pattern
             if (self.x + self.y) % 2 == 0:  # if square (x + y)/2 remainder = 0(even) set square color to white
-                self.color = square_color_white
+                if self.clicked == True:
+                    self.color = square_color_white_clicked
+                else:
+                    self.color = square_color_white
+
+
             elif (self.x + self.y) % 2 == 1:  # else set it to black
-                self.color = square_color_black
+                if self.clicked == True:
+                    self.color = square_color_black_clicked
+                else:
+                    self.color = square_color_black
+
 
 
     # creates board
@@ -148,17 +162,45 @@ if __name__ == '__main__':
         addpiece("WR", 7, 7)
 
     def mouse_inputs(x, y):
+        global clicked
 
         for items in squares_list:
             if items.x*square_size + 120 > x and items.x*square_size < x and items.y*square_size + 120 > y and items.y*square_size < y:
                 posx = items.x
                 posy = items.y
                 print(posx, " ", posy)
+                if clicked < 1:
+                    if items.clicked == False:
+                        if (items.x + items.y) % 2 == 0:  # if square (x + y)/2 remainder = 0(even) set square color to white
+
+                            items.color = square_color_white_clicked
+
+                        elif (items.x + items.y) % 2 == 1:
+                            items.color = square_color_black_clicked
+
+                        items.clicked = True
+                        clicked += 1
+                elif items.clicked: #true
+                    if (items.x + items.y) % 2 == 0:
+                         items.color = square_color_white
+
+                    elif (items.x + items.y) % 2 == 1:
+                        items.color = square_color_black
+
+                    items.clicked = False
+                    clicked -= 1
+
+
+    def picksquares():
+        for items in squares_list:
+            if items.clicked == True:
+                print(items.x, " ", items.y)
+
+
 
 
     setupboard()
-    addpiece("WK", 4, 6)
-    addpiece("-", 4, 7)
+
     running = True
     while running:
         time.sleep(delay / 1000)
@@ -168,15 +210,15 @@ if __name__ == '__main__':
             if event.type == pygame.QUIT:
                 running = False
 
+            if event.type == pygame.MOUSEBUTTONUP:
+                x, y = pygame.mouse.get_pos()
+                mouse_inputs(x, y)
         keys = pygame.key.get_pressed()
 
-        x,y = pygame.mouse.get_pos()
-        mouse_inputs(x,y)
-
+        picksquares()
 
         screen.fill(background_color)
         printboard()
 
         pygame.display.flip()
-
 
