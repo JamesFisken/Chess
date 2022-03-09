@@ -168,12 +168,12 @@ if __name__ == '__main__':
         addpiece("WR", 7, 7)
     def move_piece(square_1, square_2,):
         global turn
-        if square_1.state[0] == "B" and turn == "Black":
+        if square_1.state[0] == "B" and turn == "Black" and square_2.state[0] != "B":
 
             addpiece(square_1.state, square_2.x, square_2.y)
             addpiece("-", square_1.x, square_1.y)
             turn = "White"
-        if square_1.state[0] == "W" and turn == "White":
+        if square_1.state[0] == "W" and turn == "White" and square_2.state[0] != "W":
             addpiece(square_1.state, square_2.x, square_2.y)
             addpiece("-", square_1.x, square_1.y)
             turn = "Black"
@@ -244,7 +244,7 @@ if __name__ == '__main__':
         addpiece("WK", 4, 6)
 
     else:
-        print("your bad")
+        print("----")
 
     running = True
     while running:
