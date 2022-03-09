@@ -23,6 +23,8 @@ if __name__ == '__main__':
 
     clicked = 0
 
+    turn = "White"
+
     DEFAULT_IMAGE_SIZE = (120, 120)
     # images
     # sample: carImg = pygame.image.load('racecar.png')
@@ -61,6 +63,10 @@ if __name__ == '__main__':
     pygame.init()
 
     screen = pygame.display.set_mode((width, height))
+
+
+
+
 
 
     class square:
@@ -160,16 +166,36 @@ if __name__ == '__main__':
         addpiece("WB", 5, 7)
         addpiece("WN", 6, 7)
         addpiece("WR", 7, 7)
+    def move_piece(square_1, square_2,):
+        global turn
+        if square_1.state[0] == "B" and turn == "Black":
+
+            addpiece(square_1.state, square_2.x, square_2.y)
+            addpiece("-", square_1.x, square_1.y)
+            turn = "White"
+        if square_1.state[0] == "W" and turn == "White":
+            addpiece(square_1.state, square_2.x, square_2.y)
+            addpiece("-", square_1.x, square_1.y)
+            turn = "Black"
+
+
+
+
 
     def mouse_inputs(x, y):
+        global square_1
+        global square_2
+
+
         global clicked
 
         for items in squares_list:
             if items.x*square_size + 120 > x and items.x*square_size < x and items.y*square_size + 120 > y and items.y*square_size < y:
                 posx = items.x
                 posy = items.y
-                print(posx, " ", posy)
-                if clicked < 1:
+
+
+                if clicked < 1 and items.state != "-":
                     if items.clicked == False:
                         if (items.x + items.y) % 2 == 0:  # if square (x + y)/2 remainder = 0(even) set square color to white
 
@@ -178,28 +204,47 @@ if __name__ == '__main__':
                         elif (items.x + items.y) % 2 == 1:
                             items.color = square_color_black_clicked
 
+                        square_1 = items
                         items.clicked = True
-                        clicked += 1
+                        clicked = 1
+
                 elif items.clicked: #true
                     if (items.x + items.y) % 2 == 0:
-                         items.color = square_color_white
+                        items.color = square_color_white
 
                     elif (items.x + items.y) % 2 == 1:
                         items.color = square_color_black
 
                     items.clicked = False
-                    clicked -= 1
+                    clicked = 0
+                elif clicked == 1:
+                    square_2 = items
+                    move_piece(square_1, square_2)
 
 
-    def picksquares():
-        for items in squares_list:
-            if items.clicked == True:
-                print(items.x, " ", items.y)
+
+
+                    for i in squares_list: #reset board
+                        if (i.x + i.y) % 2 == 0:
+                            i.color = square_color_white
+
+                        elif (i.x + i.y) % 2 == 1:
+                            i.color = square_color_black
+
+                        i.clicked = False
+                        clicked = 0
+
 
 
 
 
     setupboard()
+    if input("do you want to use the pre-determined opening?(y/n): ").lower() == "y":
+        addpiece("-", 4, 7)
+        addpiece("WK", 4, 6)
+
+    else:
+        print("your bad")
 
     running = True
     while running:
@@ -215,7 +260,7 @@ if __name__ == '__main__':
                 mouse_inputs(x, y)
         keys = pygame.key.get_pressed()
 
-        picksquares()
+
 
         screen.fill(background_color)
         printboard()
