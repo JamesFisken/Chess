@@ -1,5 +1,4 @@
 
-
 if __name__ == '__main__':
 
     import pygame
@@ -166,17 +165,64 @@ if __name__ == '__main__':
         addpiece("WB", 5, 7)
         addpiece("WN", 6, 7)
         addpiece("WR", 7, 7)
+
+
+    def check_piece_inbetween(pos_1, pos_2):
+
+        #range_x = pos_2.x - pos_1.x - 1
+        #range_y = pos_2.y - pos_1.y - 1
+
+
+        for items in squares_list:
+            if items.x < pos_1.x and items.x > pos_2.x  and pos_1.y == items.y or items.x > pos_1.x and items.x < pos_2.x and pos_1.y == items.y:
+                if items.state != "-":
+
+
+                    return False
+
+        for items in squares_list:
+            if items.y < pos_1.y and items.y > pos_2.y  and pos_1.x == items.x or items.y > pos_1.y and items.y < pos_2.y and pos_1.x == items.x:
+                if items.state != "-":
+                    return False
+
+
+        return True
+
+
+
+
+
+
+
+
+    def legal_move(pos_1, pos_2, piece):
+        if piece[1] == "R":
+            if pos_2.x - pos_1.x == 0:
+                if check_piece_inbetween(pos_1, pos_2):
+                    return True
+
+            if pos_2.y - pos_1.y == 0:
+                if check_piece_inbetween(pos_1, pos_2):
+                    return True
+
+
+        else:
+            return True
+
+
+
     def move_piece(square_1, square_2,):
         global turn
-        if square_1.state[0] == "B" and turn == "Black" and square_2.state[0] != "B":
+        if legal_move(square_1, square_2, square_1.state):
+            if square_1.state[0] == "B" and turn == "Black" and square_2.state[0] != "B":
 
-            addpiece(square_1.state, square_2.x, square_2.y)
-            addpiece("-", square_1.x, square_1.y)
-            turn = "White"
-        if square_1.state[0] == "W" and turn == "White" and square_2.state[0] != "W":
-            addpiece(square_1.state, square_2.x, square_2.y)
-            addpiece("-", square_1.x, square_1.y)
-            turn = "Black"
+                addpiece(square_1.state, square_2.x, square_2.y)
+                addpiece("-", square_1.x, square_1.y)
+                turn = "White"
+            if square_1.state[0] == "W" and turn == "White" and square_2.state[0] != "W":
+                addpiece(square_1.state, square_2.x, square_2.y)
+                addpiece("-", square_1.x, square_1.y)
+                turn = "Black"
 
 
 
@@ -266,4 +312,3 @@ if __name__ == '__main__':
         printboard()
 
         pygame.display.flip()
-
