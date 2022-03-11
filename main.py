@@ -8,8 +8,8 @@ if __name__ == '__main__':
 
     # variables
 
-    width = 960
-    height = 960
+    #width = 1560 #960
+    #height = 960 #960
     fps = 60
     delay = 1000 / fps
     background_color = (0, 0, 20)
@@ -59,12 +59,12 @@ if __name__ == '__main__':
     columns = 8
     squares_list = []
     # start pygame
+    width = columns * 120
+    height = rows * 120
+
     pygame.init()
 
     screen = pygame.display.set_mode((width, height))
-
-
-
 
 
 
@@ -131,12 +131,12 @@ if __name__ == '__main__':
     def addpiece(piece, x, y):
         if x < 0:
             x = 0
-        if x > 7:
-            x = 7
+        if x > columns-1:
+            x = columns
         if y < 0:
             y = 0
-        if y > 7:
-            y = 7
+        if y > rows:
+            y = rows
         for items in squares_list:
             if items.x == x and items.y == y:
                 items.state = piece
@@ -146,6 +146,8 @@ if __name__ == '__main__':
 
         for x in range(columns):
             addpiece("BP", x, 1)
+            if x > 7:
+                addpiece("BR", x, 0)
         addpiece("BR", 0, 0)
         addpiece("BN", 1, 0)
         addpiece("BB", 2, 0)
@@ -155,8 +157,11 @@ if __name__ == '__main__':
         addpiece("BN", 6, 0)
         addpiece("BR", 7, 0)
 
+
         for x in range(columns):
             addpiece("WP", x, 6)
+            if x > 7:
+                addpiece("WR", x, 7)
         addpiece("WR", 0, 7)
         addpiece("WN", 1, 7)
         addpiece("WB", 2, 7)
@@ -171,8 +176,6 @@ if __name__ == '__main__':
 
         #range_x = pos_2.x - pos_1.x - 1
         #range_y = pos_2.y - pos_1.y - 1
-
-
         for items in squares_list:
             if items.x < pos_1.x and items.x > pos_2.x  and pos_1.y == items.y or items.x > pos_1.x and items.x < pos_2.x and pos_1.y == items.y:
                 if items.state != "-":
@@ -187,12 +190,6 @@ if __name__ == '__main__':
 
 
         return True
-
-
-
-
-
-
 
 
     def legal_move(pos_1, pos_2, piece):
@@ -210,7 +207,6 @@ if __name__ == '__main__':
             return True
 
 
-
     def move_piece(square_1, square_2,):
         global turn
         if legal_move(square_1, square_2, square_1.state):
@@ -223,9 +219,6 @@ if __name__ == '__main__':
                 addpiece(square_1.state, square_2.x, square_2.y)
                 addpiece("-", square_1.x, square_1.y)
                 turn = "Black"
-
-
-
 
 
     def mouse_inputs(x, y):
@@ -279,8 +272,6 @@ if __name__ == '__main__':
 
                         i.clicked = False
                         clicked = 0
-
-
 
 
 
