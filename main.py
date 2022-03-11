@@ -4,6 +4,11 @@ if __name__ == '__main__':
     import pygame
     import time
 
+    pygame.font.init()  # you have to call this at the start,
+    # if you want to use this module.
+    myfont = pygame.font.SysFont('Comic Sans MS', 80)
+    textsurface = myfont.render('Chess', False, (0, 0, 0))
+
 
 
     # variables
@@ -59,13 +64,12 @@ if __name__ == '__main__':
     columns = 8
     squares_list = []
     # start pygame
-    width = columns * 120
+    width = columns * 120 + 350
     height = rows * 120
 
     pygame.init()
 
     screen = pygame.display.set_mode((width, height))
-
 
 
     class square:
@@ -173,6 +177,8 @@ if __name__ == '__main__':
         addpiece("WR", 7, 7)
 
 
+
+
     def check_piece_inbetween(pos_1, pos_2):
 
         #range_x = pos_2.x - pos_1.x - 1
@@ -195,13 +201,14 @@ if __name__ == '__main__':
 
     def legal_move(pos_1, pos_2, piece):
         if piece[1] == "R": #if piece is a rook
-            if pos_2.x - pos_1.x == 0: #if its x position doesn't change
-                if check_piece_inbetween(pos_1, pos_2): #check that there are no pieces inbetween the rook
-                    return True #move is legal
-            if pos_2.y - pos_1.y == 0:
-                if check_piece_inbetween(pos_1, pos_2):
-                    return True #move is legal
+            if pos_2.x - pos_1.x == 0 and check_piece_inbetween(pos_1, pos_2): #if its x position doesn't change
 
+                return True #move is legal
+            if pos_2.y - pos_1.y == 0 and check_piece_inbetween(pos_1, pos_2):
+
+                return True #move is legal
+            else:
+                return False
 
 
         if piece[1] == "P": #if piece = pawn
@@ -228,9 +235,13 @@ if __name__ == '__main__':
                 return True #move is legal
             elif piece[0] == "W" and pos_1.x + 1 == pos_2.x and pos_1.y - 1 == pos_2.y and pos_2.state[0] == "B" or piece[0] == "W" and pos_1.x - 1 == pos_2.x and pos_1.y - 1 == pos_2.y and pos_2.state[0] == "B":
                 return True #move is legal
-
-
-
+            else:
+                return False
+        if piece[1] == "N":
+            if pos_1.x + 1 == pos_2.x and pos_1.y + 2 == pos_2.y or  pos_1.x - 1 == pos_2.x and pos_1.y + 2 == pos_2.y or pos_1.x + 1 == pos_2.x and pos_1.y - 2 == pos_2.y or  pos_1.x - 1 == pos_2.x and pos_1.y - 2 == pos_2.y:
+                return True
+            elif pos_1.x + 2 == pos_2.x and pos_1.y + 1 == pos_2.y or  pos_1.x - 2 == pos_2.x and pos_1.y + 1 == pos_2.y or pos_1.x + 2 == pos_2.x and pos_1.y - 1 == pos_2.y or  pos_1.x - 2 == pos_2.x and pos_1.y - 1 == pos_2.y:
+                return True
 
             else:
                 return False #move is not legal
@@ -247,10 +258,15 @@ if __name__ == '__main__':
 
                 addpiece(square_1.state, square_2.x, square_2.y)
                 addpiece("-", square_1.x, square_1.y)
+
+
                 turn = "White"
             if square_1.state[0] == "W" and turn == "White" and square_2.state[0] != "W":
+
+
                 addpiece(square_1.state, square_2.x, square_2.y)
                 addpiece("-", square_1.x, square_1.y)
+
                 turn = "Black"
 
 
@@ -311,7 +327,7 @@ if __name__ == '__main__':
     setupboard()
     if input("do you want to use the pre-determined opening?(y/n): ").lower() == "y":
         addpiece("-", 4, 7)
-        addpiece("WK", 4, 6)
+        #addpiece("WK", 4, 6)
 
     else:
         print("----")
@@ -334,5 +350,7 @@ if __name__ == '__main__':
 
         screen.fill(background_color)
         printboard()
-
+        pygame.draw.rect(screen, (207, 154, 84), pygame.Rect(width-350, 0, width, height))
+        pygame.draw.rect(screen, (237, 184, 114), pygame.Rect(width - 350, 0, width, 160))
+        screen.blit(textsurface, (width-300, 20))
         pygame.display.flip()
