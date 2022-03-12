@@ -180,9 +180,27 @@ if __name__ == '__main__':
 
 
     def check_piece_inbetween(pos_1, pos_2):
-
+        fail = False
         #range_x = pos_2.x - pos_1.x - 1
         #range_y = pos_2.y - pos_1.y - 1
+        if pos_1.state[1] == "B" or pos_1.state[1] == "Q":
+            for items in squares_list:
+                if items.x > pos_2.x and items.y > pos_2.y:
+
+                    if items.x - pos_1.x == items.y - pos_1.y:
+                        print(items.x, " ", items.y)
+                        if items.state != "-" and items.x != pos_1.x and items.y != pos_1.y:
+                            fail = True
+                            print("blocked")
+            if fail:
+                return False
+            else:
+                return True
+
+
+
+
+
         for items in squares_list:
             if items.x < pos_1.x and items.x > pos_2.x  and pos_1.y == items.y or items.x > pos_1.x and items.x < pos_2.x and pos_1.y == items.y:
                 if items.state != "-":
@@ -237,14 +255,34 @@ if __name__ == '__main__':
                 return True #move is legal
             else:
                 return False
-        if piece[1] == "N":
+
+        if piece[1] == "N": #knight
             if pos_1.x + 1 == pos_2.x and pos_1.y + 2 == pos_2.y or  pos_1.x - 1 == pos_2.x and pos_1.y + 2 == pos_2.y or pos_1.x + 1 == pos_2.x and pos_1.y - 2 == pos_2.y or  pos_1.x - 1 == pos_2.x and pos_1.y - 2 == pos_2.y:
                 return True
             elif pos_1.x + 2 == pos_2.x and pos_1.y + 1 == pos_2.y or  pos_1.x - 2 == pos_2.x and pos_1.y + 1 == pos_2.y or pos_1.x + 2 == pos_2.x and pos_1.y - 1 == pos_2.y or  pos_1.x - 2 == pos_2.x and pos_1.y - 1 == pos_2.y:
                 return True
 
+
             else:
                 return False #move is not legal
+
+        if piece[1] == "K": #king
+            if pos_1.x+1 == pos_2.x and pos_1.y+1 == pos_2.y or pos_1.x-1 == pos_2.x and pos_1.y+1 == pos_2.y or pos_1.x+1 == pos_2.x and pos_1.y-1 == pos_2.y or pos_1.x-1 == pos_2.x and pos_1.y-1 == pos_2.y:
+                return True
+            elif pos_1.x+1 == pos_2.x and pos_2.y - pos_1.y == 0 or pos_1.x-1 == pos_2.x and pos_2.y - pos_1.y == 0:
+                return True
+            elif pos_1.y+1 == pos_2.y and pos_2.x - pos_1.x == 0 or pos_1.y-1 == pos_2.y and pos_2.x - pos_1.x == 0:
+                return True
+            else:
+                return False
+
+        if piece[1] == "B": #Bishop:
+            if pos_2.x - pos_1.x == pos_2.y - pos_1.y and check_piece_inbetween(pos_1, pos_2):
+
+                return True #move is legal
+            else:
+                return False
+
         else:
             return True #move is legal
 
