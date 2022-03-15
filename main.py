@@ -1,4 +1,3 @@
-
 if __name__ == '__main__':
 
     import pygame
@@ -180,8 +179,9 @@ if __name__ == '__main__':
 
 
     def check_piece_inbetween(pos_1, pos_2):
-        #range_x = pos_2.x - pos_1.x - 1
-        #range_y = pos_2.y - pos_1.y - 1
+        failed = False
+
+
         if pos_1.state[1] == "B" or pos_1.state[1] == "Q":
             #+x +y
             if abs(pos_1.x - pos_2.x) == abs(pos_1.y - pos_2.y):
@@ -190,19 +190,47 @@ if __name__ == '__main__':
                     for x in range(pos_2.x - pos_1.x-1): #correct
                         print(pos_1.x+x+1, " ", pos_1.y+x+1)
 
+                        for items in squares_list:
+                            if items.x == pos_1.x+x+1 and items.y == pos_1.y+x+1:
+                                if items.state != "-":
+                                    failed = True
+                                    print("blocked", items.x, " ", items.y)
+
 
                 if pos_1.x > pos_2.x and pos_1.y > pos_2.y:
                     print(pos_2.x, " ", pos_2.y, "  -x -y")
                     for x in range(abs(pos_2.x-pos_1.x)-1):
-                        print(pos_1.x-x, " ", pos_1.y-x)
+                        print(pos_1.x+x-2, " ", pos_1.y+x-2)
+                        for items in squares_list:
+                            if items.x == pos_1.x+x-2 and items.y == pos_1.y+x-2 and pos_1.x > pos_2.x and pos_1.y > pos_2.y:
+                                if items.state != "-":
+                                    failed = True
+                                    print("blocked", items.x, " ", items.y)
+
 
 
                 if pos_1.x < pos_2.x and pos_1.y > pos_2.y:
-                    print(pos_2.x, " ", pos_2.y, "  +x -y")
+
+                    for x in range(abs(pos_2.x-pos_1.x)-1):
+                        print(pos_1.x+x+1, " ", pos_1.y+x-1)
+                        for items in squares_list:
+
+                            if items.x == pos_1.x + x + 1 and items.y == pos_1.y + x - 1 and pos_1.x > pos_2.x and pos_1.y > pos_2.y:
+                                if items.state != "-":
+                                    failed = True
+                                    print("blocked", items.x, " ", items.y)
+
+
+
                 if pos_1.x > pos_2.x and pos_1.y < pos_2.y:
                     print(pos_2.x, " ", pos_2.y, "  -x +y")
             else:
                 print("i am being stuck here")
+                return False
+        if failed:
+            return False
+        elif failed == False:
+            return True
 
 
 
@@ -245,7 +273,7 @@ if __name__ == '__main__':
 
                 elif piece[0] == "B" and pos_2.y - pos_1.y == 2 and pos_1.moved == False: #if the pawn hasn't moved yet then it can move 2 spaces foward
 
-                    return True ##move is legal
+                    return True#move is legal
 
                 if piece[0] == "W" and pos_2.y - pos_1.y == -1: #if piece black and it moves upwards
 
