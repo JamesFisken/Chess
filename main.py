@@ -42,6 +42,20 @@ if __name__ == '__main__':
     square_size = 120
 
     move_history = []
+    chesscoords_x = {
+        0 : "a",
+        1: "b",
+        2: "c",
+        3: "d",
+        4: "e",
+        5: "f",
+        6: "g",
+        7: "h"
+
+
+    }
+
+
 
     clicked = 0
 
@@ -325,14 +339,25 @@ if __name__ == '__main__':
 
 
     def translate_move_history():
+        global turn
         global move_history
         for x in range(round(len(move_history)/6)):
-            print(move_history[0]*x)
-            print(move_history[1]*x)
-            print(move_history[2]*x)
-            print(move_history[3]*x)
-            print(move_history[4]*x)
-            print(move_history[5]*x)
+            a = ""
+
+            print("----------")
+
+            if move_history[6*x+0][1] != "P":
+                a += move_history[6*x+0][1]
+
+            if move_history[6 * x + 3] != "-":
+                a += "x"
+
+            a += chesscoords_x[move_history[6 * x + 4]]
+            a += str(8 - move_history[6 * x + 5])
+
+            a_txt = smallfont.render(a, False, smallfont_color)
+
+            screen.blit(a_txt, (width - 150, x*20+200))
 
 
 
@@ -447,6 +472,9 @@ if __name__ == '__main__':
         screen.blit(coords_h, (square_size * 7 + 3, height - 30))
 
 
+        translate_move_history()
+
+
     setupboard()
     if input("do you want to use the pre-determined opening?(y/n): ").lower() == "y":
         addpiece("-", 4, 7)
@@ -479,10 +507,11 @@ if __name__ == '__main__':
 
         screen.fill(background_color)
         printboard()
-        addtext()
         pygame.draw.rect(screen, (207, 154, 84), pygame.Rect(width - 350, 0, width, height))
         pygame.draw.rect(screen, (237, 184, 114), pygame.Rect(width - 350, 0, width, 160))
-        screen.blit(textsurface, (width-300, 20))
+        screen.blit(textsurface, (width - 300, 20))
+        addtext()
+
 
 
 
