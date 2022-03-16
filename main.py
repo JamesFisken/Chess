@@ -41,6 +41,8 @@ if __name__ == '__main__':
     square_color_white_clicked = (205, 167, 80)
     square_size = 120
 
+    move_history = []
+
     clicked = 0
 
     turn = "White"
@@ -163,6 +165,9 @@ if __name__ == '__main__':
                 items.state = piece
 
 
+
+
+
     def setupboard():  # sets up the chess board in a conventional way
 
         for x in range(columns):
@@ -199,6 +204,7 @@ if __name__ == '__main__':
                 if items.x == pos_1.x + x*x_direction + x_direction and items.y == pos_1.y + x*y_direction + y_direction:
                     if items.state != "-":
                         succeeded = False
+
 
         return succeeded
 
@@ -318,6 +324,15 @@ if __name__ == '__main__':
 
 
 
+    def translate_move_history():
+        global move_history
+        for x in range(round(len(move_history)/6)):
+            print(move_history[0]*x)
+            print(move_history[1]*x)
+            print(move_history[2]*x)
+            print(move_history[3]*x)
+            print(move_history[4]*x)
+            print(move_history[5]*x)
 
 
 
@@ -327,19 +342,37 @@ if __name__ == '__main__':
         if legal_move(square_1, square_2, square_1.state):
 
             if square_1.state[0] == "B" and turn == "Black" and square_2.state[0] != "B":
+                move_history.append(square_1.state)
+                move_history.append(square_1.x)
+                move_history.append(square_1.y)
+                move_history.append(square_2.state)
+
                 square_2.moved = True  # needs to set the new position to have moved because pieces have no memory only squares do
                 addpiece(square_1.state, square_2.x, square_2.y)
                 addpiece("-", square_1.x, square_1.y)
 
+                move_history.append(square_2.x)
+                move_history.append(square_2.y)
 
                 turn = "White"
             if square_1.state[0] == "W" and turn == "White" and square_2.state[0] != "W":
+                move_history.append(square_1.state)
+                move_history.append(square_1.x)
+                move_history.append(square_1.y)
+                move_history.append(square_2.state)
+
                 square_2.moved = True  # needs to set the new position to have moved because pieces have no memory only squares do
                 addpiece(square_1.state, square_2.x, square_2.y)
                 addpiece("-", square_1.x, square_1.y)
 
                 turn = "Black"
 
+                move_history.append(square_2.x)
+                move_history.append(square_2.y)
+
+
+
+            translate_move_history()
 
     def mouse_inputs(x, y):
         global square_1
