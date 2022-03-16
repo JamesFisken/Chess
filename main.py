@@ -175,16 +175,18 @@ if __name__ == '__main__':
         addpiece("WN", 6, 7)
         addpiece("WR", 7, 7)
 
-
+    
 
 
     def check_piece_inbetween(pos_1, pos_2):
         failed = False
 
-
+        print("-------------------")
         if pos_1.state[1] == "B" or pos_1.state[1] == "Q":
             #+x +y
             if abs(pos_1.x - pos_2.x) == abs(pos_1.y - pos_2.y):
+
+
                 if pos_1.x < pos_2.x and pos_1.y < pos_2.y:
                     print(pos_2.x, " ", pos_2.y, "  +x +y")
                     for x in range(pos_2.x - pos_1.x-1): #correct
@@ -202,7 +204,7 @@ if __name__ == '__main__':
                     for x in range(abs(pos_2.x-pos_1.x)-1):
                         print(pos_1.x+x-2, " ", pos_1.y+x-2)
                         for items in squares_list:
-                            if items.x == pos_1.x+x-2 and items.y == pos_1.y+x-2 and pos_1.x > pos_2.x and pos_1.y > pos_2.y:
+                            if items.x == pos_1.x-x-1 and items.y == pos_1.y-x-1:
                                 if items.state != "-":
                                     failed = True
                                     print("blocked", items.x, " ", items.y)
@@ -210,12 +212,12 @@ if __name__ == '__main__':
 
 
                 if pos_1.x < pos_2.x and pos_1.y > pos_2.y:
-
+                    print(pos_2.x, " ", pos_2.y, "  +x -y")
                     for x in range(abs(pos_2.x-pos_1.x)-1):
-                        print(pos_1.x+x+1, " ", pos_1.y+x-1)
+                        print(pos_1.x+x+1, " ", pos_1.y-x-1)
                         for items in squares_list:
 
-                            if items.x == pos_1.x + x + 1 and items.y == pos_1.y + x - 1 and pos_1.x > pos_2.x and pos_1.y > pos_2.y:
+                            if items.x == pos_1.x + x + 1 and items.y == pos_1.y - x - 1:
                                 if items.state != "-":
                                     failed = True
                                     print("blocked", items.x, " ", items.y)
@@ -224,6 +226,17 @@ if __name__ == '__main__':
 
                 if pos_1.x > pos_2.x and pos_1.y < pos_2.y:
                     print(pos_2.x, " ", pos_2.y, "  -x +y")
+                    for x in range(abs(pos_2.x-pos_1.x)-1):
+                        print(pos_1.x-x-1, " ", pos_1.y+x+1)
+                        for items in squares_list:
+
+                            if items.x == pos_1.x - x - 1 and items.y == pos_1.y + x + 1:
+                                if items.state != "-":
+                                    failed = True
+                                    print("blocked", items.x, " ", items.y)
+
+
+
             else:
                 print("i am being stuck here")
                 return False
