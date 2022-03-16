@@ -6,9 +6,26 @@ if __name__ == '__main__':
     pygame.font.init()  # you have to call this at the start,
     # if you want to use this module.
     myfont = pygame.font.SysFont('Comic Sans MS', 80)
+    smallfont = pygame.font.SysFont('Comic Sans MS', 20)
+    smallfont_color = (0, 0, 0)
     textsurface = myfont.render('Chess', False, (0, 0, 0))
+    coords_a = smallfont.render('A', False, smallfont_color)
+    coords_b = smallfont.render('B', False, smallfont_color)
+    coords_c = smallfont.render('C', False, smallfont_color)
+    coords_d = smallfont.render('D', False, smallfont_color)
+    coords_e = smallfont.render('E', False, smallfont_color)
+    coords_f = smallfont.render('F', False, smallfont_color)
+    coords_g = smallfont.render('G', False, smallfont_color)
+    coords_h = smallfont.render('H', False, smallfont_color)
 
-
+    coords_1 = smallfont.render('1', False, smallfont_color)
+    coords_2 = smallfont.render('2', False, smallfont_color)
+    coords_3 = smallfont.render('3', False, smallfont_color)
+    coords_4 = smallfont.render('4', False, smallfont_color)
+    coords_5 = smallfont.render('5', False, smallfont_color)
+    coords_6 = smallfont.render('6', False, smallfont_color)
+    coords_7 = smallfont.render('7', False, smallfont_color)
+    coords_8 = smallfont.render('8', False, smallfont_color)
 
     # variables
 
@@ -20,8 +37,8 @@ if __name__ == '__main__':
 
     square_color_black = (105, 57, 3)
     square_color_black_clicked = (75, 27, 0)
-    square_color_white = (250, 225, 197)
-    square_color_white_clicked = (200, 175, 147)
+    square_color_white = (247, 216, 141)
+    square_color_white_clicked = (205, 167, 80)
     square_size = 120
 
     clicked = 0
@@ -175,42 +192,38 @@ if __name__ == '__main__':
         addpiece("WN", 6, 7)
         addpiece("WR", 7, 7)
 
-    def check_bishop_diagonal(pos_1, pos_2, x_direction, y_direction):
+    def check_diagonal(pos_1, pos_2, x_direction, y_direction):
         succeeded = True
         for x in range(abs(pos_2.x - pos_1.x) - 1):  # correct
             for items in squares_list:
                 if items.x == pos_1.x + x*x_direction + x_direction and items.y == pos_1.y + x*y_direction + y_direction:
                     if items.state != "-":
                         succeeded = False
-                        print("blocked", items.x, " ", items.y)
+
         return succeeded
 
 
     def check_piece_inbetween(pos_1, pos_2):
-
-        print("-------------------")
         if pos_1.state[1] == "B" or pos_1.state[1] == "Q":
             #+x +y
             if abs(pos_1.x - pos_2.x) == abs(pos_1.y - pos_2.y):
+                if pos_1.x < pos_2.x and pos_1.y < pos_2.y and check_diagonal(pos_1, pos_2, 1, 1): #correct
+                    return True
+                if pos_1.x > pos_2.x and pos_1.y > pos_2.y and check_diagonal(pos_1, pos_2, -1, -1): #correct
+                    return True
+                if pos_1.x < pos_2.x and pos_1.y > pos_2.y and check_diagonal(pos_1, pos_2, 1, -1): #correct
+                    return True
+                if pos_1.x > pos_2.x and pos_1.y < pos_2.y and check_diagonal(pos_1, pos_2, -1, 1): #correct
+                    return True
 
 
-                if pos_1.x < pos_2.x and pos_1.y < pos_2.y and check_bishop_diagonal(pos_1, pos_2, 1, 1): #correct
-                    return True
-                if pos_1.x > pos_2.x and pos_1.y > pos_2.y and check_bishop_diagonal(pos_1, pos_2, -1, -1): #correct
-                    return True
-                if pos_1.x < pos_2.x and pos_1.y > pos_2.y and check_bishop_diagonal(pos_1, pos_2, 1, -1): #correct
-                    return True
-                if pos_1.x > pos_2.x and pos_1.y < pos_2.y and check_bishop_diagonal(pos_1, pos_2, -1, 1): #correct
-                    return True
-                else:
+
+                elif pos_1.state[1] == "B":
                     return False
-
+            elif pos_1.state[1] == "Q":
+                print("rook move")
             else:
-                print("i am being stuck here")
                 return False
-
-
-
 
 
 
@@ -218,7 +231,6 @@ if __name__ == '__main__':
         for items in squares_list:
             if items.x < pos_1.x and items.x > pos_2.x  and pos_1.y == items.y or items.x > pos_1.x and items.x < pos_2.x and pos_1.y == items.y:
                 if items.state != "-":
-
 
                     return False
 
@@ -297,25 +309,32 @@ if __name__ == '__main__':
             else:
                 return False
 
-        else:
-            return True #move is legal
+        if piece[1] == "Q": #Queen
+            if check_piece_inbetween(pos_1, pos_2):
+
+                return True #move is legal
+            else:
+                return False
+
+
+
+
 
 
     def move_piece(square_1, square_2,):
         global turn
 
         if legal_move(square_1, square_2, square_1.state):
-            square_2.moved = True #needs to set the new position to have moved because pieces have no memory only squares do
-            if square_1.state[0] == "B" and turn == "Black" and square_2.state[0] != "B":
 
+            if square_1.state[0] == "B" and turn == "Black" and square_2.state[0] != "B":
+                square_2.moved = True  # needs to set the new position to have moved because pieces have no memory only squares do
                 addpiece(square_1.state, square_2.x, square_2.y)
                 addpiece("-", square_1.x, square_1.y)
 
 
                 turn = "White"
             if square_1.state[0] == "W" and turn == "White" and square_2.state[0] != "W":
-
-
+                square_2.moved = True  # needs to set the new position to have moved because pieces have no memory only squares do
                 addpiece(square_1.state, square_2.x, square_2.y)
                 addpiece("-", square_1.x, square_1.y)
 
@@ -374,6 +393,25 @@ if __name__ == '__main__':
                         i.clicked = False
                         clicked = 0
 
+    def addtext():
+
+        screen.blit(coords_1, (3, square_size*7))
+        screen.blit(coords_2, (3, square_size * 6))
+        screen.blit(coords_3, (3, square_size * 5))
+        screen.blit(coords_4, (3, square_size * 4))
+        screen.blit(coords_5, (3, square_size * 3))
+        screen.blit(coords_6, (3, square_size * 2))
+        screen.blit(coords_7, (3, square_size * 1))
+        screen.blit(coords_8, (3, square_size * 0))
+
+        screen.blit(coords_a, (square_size * 0 + 3, height - 30))
+        screen.blit(coords_b, (square_size * 1 + 3, height - 30))
+        screen.blit(coords_c, (square_size * 2 + 3, height - 30))
+        screen.blit(coords_d, (square_size * 3 + 3, height - 30))
+        screen.blit(coords_e, (square_size * 4 + 3, height - 30))
+        screen.blit(coords_f, (square_size * 5 + 3, height - 30))
+        screen.blit(coords_g, (square_size * 6 + 3, height - 30))
+        screen.blit(coords_h, (square_size * 7 + 3, height - 30))
 
 
     setupboard()
@@ -408,7 +446,12 @@ if __name__ == '__main__':
 
         screen.fill(background_color)
         printboard()
+        addtext()
         pygame.draw.rect(screen, (207, 154, 84), pygame.Rect(width - 350, 0, width, height))
         pygame.draw.rect(screen, (237, 184, 114), pygame.Rect(width - 350, 0, width, 160))
         screen.blit(textsurface, (width-300, 20))
+
+
+
+
         pygame.display.flip()
