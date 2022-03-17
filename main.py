@@ -236,8 +236,6 @@ if __name__ == '__main__':
                 if pos_1.x > pos_2.x and pos_1.y < pos_2.y and check_diagonal(pos_1, pos_2, -1, 1): #correct
                     return True
 
-
-
                 elif pos_1.state[1] == "B":
                     return False
             elif pos_1.state[1] == "Q":
@@ -342,6 +340,7 @@ if __name__ == '__main__':
         global turn
         global move_history
         i = 0
+        height = 0
         for x in range(round(len(move_history)/6)):
             a = ""
             if move_history[6*x+0][1] != "P":
@@ -360,14 +359,12 @@ if __name__ == '__main__':
             if i % 2 == 0:
 
 
-                screen.blit(a_txt, (width - 120, 200))
+                screen.blit(a_txt, (width - 120, 200 + 20 * height))
             else:
-                screen.blit(a_txt, (width - 100, 200))
+                screen.blit(a_txt, (width - 100, 200 + 20 * height))
+                height += 1
+
             i += 1
-
-
-
-
 
 
     def move_piece(square_1, square_2,):
