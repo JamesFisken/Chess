@@ -2,7 +2,7 @@ if __name__ == '__main__':
 
     import pygame
     import time
-
+    import math
     pygame.font.init()  # you have to call this at the start,
     # if you want to use this module.
     myfont = pygame.font.SysFont('Comic Sans MS', 80)
@@ -341,11 +341,9 @@ if __name__ == '__main__':
     def translate_move_history():
         global turn
         global move_history
+        i = 0
         for x in range(round(len(move_history)/6)):
             a = ""
-
-            print("----------")
-
             if move_history[6*x+0][1] != "P":
                 a += move_history[6*x+0][1]
 
@@ -357,7 +355,18 @@ if __name__ == '__main__':
 
             a_txt = smallfont.render(a, False, smallfont_color)
 
-            screen.blit(a_txt, (width - 150, x*20+200))
+
+
+            if i % 2 == 0:
+
+
+                screen.blit(a_txt, (width - 120, 200))
+            else:
+                screen.blit(a_txt, (width - 100, 200))
+            i += 1
+
+
+
 
 
 
