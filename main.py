@@ -6,8 +6,11 @@ if __name__ == '__main__':
     pygame.font.init()  # you have to call this at the start,
     # if you want to use this module.
     myfont = pygame.font.SysFont('Comic Sans MS', 80)
+    medium_font = pygame.font.SysFont('Comic Sans MS', 35)
     smallfont = pygame.font.SysFont('Comic Sans MS', 20)
+
     smallfont_color = (0, 0, 0)
+
     textsurface = myfont.render('Chess', False, (0, 0, 0))
     coords_a = smallfont.render('A', False, smallfont_color)
     coords_b = smallfont.render('B', False, smallfont_color)
@@ -27,6 +30,8 @@ if __name__ == '__main__':
     coords_7 = smallfont.render('7', False, smallfont_color)
     coords_8 = smallfont.render('8', False, smallfont_color)
 
+    move_history_title_White = medium_font.render("WHITE   black", False, (255, 255, 255))
+    move_history_title_Black = medium_font.render("white   BLACK", False, (255, 255, 255))
     # variables
 
     #width = 1560 #960
@@ -355,14 +360,13 @@ if __name__ == '__main__':
             a_txt = smallfont.render(a, False, smallfont_color)
 
 
-
             if i % 2 == 0:
 
-
-                screen.blit(a_txt, (width - 120, 200 + 20 * height))
+                screen.blit(a_txt, (width - 250, 200 + 20 * height))
             else:
-                screen.blit(a_txt, (width - 100, 200 + 20 * height))
+                screen.blit(a_txt, (width - 150 , 200 + 20 * height))
                 height += 1
+
 
             i += 1
 
@@ -476,8 +480,10 @@ if __name__ == '__main__':
         screen.blit(coords_f, (square_size * 5 + 3, height - 30))
         screen.blit(coords_g, (square_size * 6 + 3, height - 30))
         screen.blit(coords_h, (square_size * 7 + 3, height - 30))
-
-
+        if turn == "White":
+            screen.blit(move_history_title_White, (width - 300, height - 800))
+        else:
+            screen.blit(move_history_title_Black, (width - 300, height - 800))
         translate_move_history()
 
 
